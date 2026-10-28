@@ -101,8 +101,8 @@ def status(key):
     return f'<span class="status{" confirmed" if value else ""}">{e(value or "To be confirmed")}</span>'
 
 
-def topic_list():
-    return ''.join(f'<div class="topic-item"><span class="topic-number">{i:02d}</span><h3>{name}</h3></div>' for i, (name, _) in enumerate(TOPICS, 1))
+def topic_keywords():
+    return ''.join(f'<li>{e(name)}</li>' for name, _ in TOPICS)
 
 
 def home():
@@ -116,7 +116,7 @@ def home():
   <p class="hero-title">{e(DATA['title'])}</p>
   <div class="hero-meta"><span>{icon('calendar')}{e(DATA['dates'])}</span><span>{icon('pin')}{e(DATA['city'])}, {e(DATA['country'])}</span></div>
   <div class="hero-actions"><a class="button" href="#call-for-abstracts">Call for abstracts <span class="arrow" aria-hidden="true">↓</span></a><a class="text-link" href="{e(DATA['call_for_abstracts'])}" download>Download conference notice {ARROW}</a></div>
-  <div class="hero-caption">Our host university<strong>{e(DATA['university'])}</strong></div></div>
+  <div class="hero-keywords"><span class="eyebrow">Scientific keywords</span><ul aria-label="Scientific keywords">{topic_keywords()}</ul></div></div>
 </section>
 <section class="facts" aria-label="Conference at a glance"><div class="wrap">
   <div class="fact">{icon('calendar')}<div><span class="label">Save the date</span><strong>{e(DATA['dates'])}</strong></div></div>
@@ -135,7 +135,6 @@ def home():
   </article>
   <aside class="abstract-note" aria-labelledby="notice-heading"><span class="eyebrow">Conference documents</span><h3 id="notice-heading">The conference<br>call for abstracts.</h3><p>Download the original conference invitation, including the scientific scope, submission information and contact details.</p><a class="button" href="{e(DATA['call_for_abstracts'])}" download>Download call for abstracts <span class="arrow" aria-hidden="true">↓</span></a><div class="cfp-quick-links"><a class="text-link" href="key-dates.html">All conference dates {FORWARD}</a><a class="text-link" href="{e(DATA['map_url'])}" target="_blank" rel="noopener noreferrer">View the university on Google Maps {ARROW}</a></div></aside>
 </div></section>
-<section class="section topics-section" aria-labelledby="topics-heading"><div class="wrap"><div class="section-heading"><div><span class="eyebrow red">Science & applications</span><h2 id="topics-heading">A field of possibilities.</h2></div><a class="text-link" href="scientific-topics.html">Explore the scientific topics {FORWARD}</a></div><div class="topics-list">{topic_list()}</div></div></section>
 <section class="city-band" aria-labelledby="city-heading"><img class="city-image" src="assets/images/liverpool-waterfront.jpg" alt="The Liverpool skyline across the River Mersey" loading="lazy" width="4320" height="2430"><div class="city-copy"><span class="eyebrow">Liverpool · United Kingdom</span><h2 id="city-heading">See you in Liverpool.</h2><p>Join us at the {e(DATA['university'])} for an international meeting of researchers and practitioners in gas discharges and their applications.</p><a class="text-link" href="venue.html">Discover the venue {FORWARD}</a></div></section>'''
 
 
