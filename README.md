@@ -77,6 +77,8 @@ python3 scripts/build_site.py
 
 首页右侧提供院系介绍、研究页面及利物浦景点的官方链接。这些链接和简短介绍在 `content/conference.json` 的 `department_about_url`、`department_research_url` 和 `local_attractions` 中维护。
 
+顶部导航的 **Registration** 和首页的 **Register** 按钮链接到 Microsoft Forms 的参会者填写页面，在新标签页中打开。链接通过 `content/conference.json` 的 `registration_url` 维护。应使用“收集回复 / Collect responses”提供的填写地址，避免使用 `DesignPageV2.aspx` 编辑地址。当前表单已在未登录状态下验证可查看，未填写或提交测试数据。注册信息由 Microsoft Forms 收集，本网站不保存表单回复。
+
 ## 图片来源
 
 首页顶部校园照片使用用户提供的 `figure/University-of-Liverpool-Image-Gallery-2.jpg.webp`，图片文件未改动。

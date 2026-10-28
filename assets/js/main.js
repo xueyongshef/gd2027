@@ -26,7 +26,7 @@
   document.addEventListener('click', event => {
     if (!event.target.closest('.site-header')) closeMenu();
   });
-  window.matchMedia('(min-width: 801px)').addEventListener('change', event => {
+  window.matchMedia('(min-width: 961px)').addEventListener('change', event => {
     if (event.matches) closeMenu();
   });
 })();

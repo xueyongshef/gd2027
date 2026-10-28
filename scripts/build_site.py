@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 import shutil
 import sys
+from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = json.loads((ROOT / 'content/conference.json').read_text(encoding='utf-8'))
@@ -47,6 +48,7 @@ def header(active):
     for url, label in NAV:
         current = ' aria-current="page"' if url == active else ''
         links += f'<a href="{url}"{current}>{label}</a>'
+    links += registration_link('Registration', 'nav-registration')
     return f'''<a class="skip-link" href="#main">Skip to main content</a>
 <div class="utility"><div class="wrap"><p>{e(DATA['university'])} <span class="place">&nbsp; / &nbsp; {e(DATA['country'])}</span></p><p>{e(DATA['dates'])}</p></div></div>
 <header class="site-header"><div class="wrap header-inner">
@@ -76,14 +78,15 @@ def page(filename, title, description, main):
     }
     structured_json = json.dumps(structured, ensure_ascii=False).replace('<', '\\u003c')
     style_version = hashlib.sha256((ROOT / 'assets/css/style.css').read_bytes()).hexdigest()[:10]
+    script_version = hashlib.sha256((ROOT / 'assets/js/main.js').read_bytes()).hexdigest()[:10]
     return f'''<!doctype html>
 <html lang="en-GB"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(title)} | GD2027 · Liverpool</title><meta name="description" content="{e(description)}">
 <meta name="theme-color" content="#112e3b"><meta property="og:title" content="{e(title)} | GD2027"><meta property="og:description" content="{e(description)}"><meta property="og:type" content="website">
-<link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="assets/css/style.css?v={style_version}"><script src="assets/js/main.js" defer></script>
+<link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="assets/css/style.css?v={style_version}"><script src="assets/js/main.js?v={script_version}" defer></script>
 <script type="application/ld+json">{structured_json}</script>
-<noscript><style>@media(max-width:800px){{.site-header{{position:static}}.header-inner{{flex-wrap:wrap;padding-block:18px}}.menu-toggle{{display:none}}.site-nav{{display:flex;position:static;flex-direction:row;flex-wrap:wrap;box-shadow:none;padding:0;border:0}}.site-nav a{{padding:8px 10px}}}}</style></noscript>
+<noscript><style>@media(max-width:960px){{.site-header{{position:static}}.header-inner{{flex-wrap:wrap;padding-block:18px}}.menu-toggle{{display:none}}.site-nav{{display:flex;position:static;flex-direction:row;flex-wrap:wrap;box-shadow:none;padding:0;border:0}}.site-nav a{{padding:8px 10px}}}}</style></noscript>
 </head><body>{header(filename)}<main id="main">{main}</main>{footer()}</body></html>
 '''
 
@@ -105,6 +108,16 @@ def topic_keywords():
     return ''.join(f'<li>{e(name)}</li>' for name, _ in TOPICS)
 
 
+def registration_link(label, cls):
+    url = DATA.get('registration_url')
+    if not url:
+        return ''
+    parsed = urlparse(url)
+    if parsed.scheme != 'https' or not parsed.netloc or 'designpage' in parsed.path.lower():
+        raise ValueError('registration_url must be an HTTPS participant link, not a form editing page.')
+    return f'<a class="{e(cls)}" href="{e(url)}" target="_blank" rel="noopener noreferrer">{e(label)} {ARROW}</a>'
+
+
 def local_guide():
     links = ''.join(
         f'<li><a href="{e(attraction["url"])}" target="_blank" rel="noopener noreferrer"><span><strong>{e(attraction["title"])}</strong><small>{e(attraction["description"])}</small></span>{ARROW}</a></li>'
@@ -123,7 +136,7 @@ def home():
   <div class="wrap"><span class="eyebrow">{e(DATA['edition'])} International Conference · GD2027</span><h1 id="hero-heading">Advancing gas<br>discharge <em>science.</em></h1>
   <p class="hero-title">{e(DATA['title'])}</p>
   <div class="hero-meta"><span>{icon('calendar')}{e(DATA['dates'])}</span><span>{icon('pin')}{e(DATA['city'])}, {e(DATA['country'])}</span></div>
-  <div class="hero-actions"><a class="button" href="#call-for-abstracts">Call for abstracts <span class="arrow" aria-hidden="true">↓</span></a><a class="text-link" href="{e(DATA['call_for_abstracts'])}" download>Download conference notice {ARROW}</a></div>
+  <div class="hero-actions"><a class="button" href="#call-for-abstracts">Call for abstracts <span class="arrow" aria-hidden="true">↓</span></a>{registration_link('Register', 'button hero-register')}<a class="text-link" href="{e(DATA['call_for_abstracts'])}" download>Download conference notice {ARROW}</a></div>
   <div class="hero-keywords"><span class="eyebrow">Scientific keywords</span><ul aria-label="Scientific keywords">{topic_keywords()}</ul></div></div>
 </section>
 <section class="facts" aria-label="Conference at a glance"><div class="wrap">
