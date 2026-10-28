@@ -1,0 +1,20 @@
+{
+  "short_name": "GD2027",
+  "edition": "24th",
+  "title": "International Conference on Gas Discharges and their Applications",
+  "dates": "12–17 September 2027",
+  "start_date": "2027-09-12",
+  "end_date": "2027-09-17",
+  "city": "Liverpool",
+  "country": "United Kingdom",
+  "university": "University of Liverpool",
+  "department": "Department of Electrical Engineering and Electronics",
+  "email": "xue.yong@liverpool.ac.uk",
+  "map_url": "https://www.google.com/maps/search/?api=1&query=University+of+Liverpool+Liverpool+United+Kingdom",
+  "abstract_deadline": null,
+  "full_paper_deadline": null,
+  "registration_deadline": null,
+  "call_for_abstracts": "documents/gd2027-call-for-abstracts.docx",
+  "abstract_template": null,
+  "full_paper_template": null
+}

@@ -1,0 +1,18 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//GD2027//Conference//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:gd2027-conference@xueyongshef.github.io
+DTSTAMP:20261028T121310Z
+DTSTART;VALUE=DATE:20270912
+DTEND;VALUE=DATE:20270918
+SUMMARY:GD2027 — International Conference on Gas Discharges and their A
+ pplications
+LOCATION:University of Liverpool\, Liverpool\, United Kingdom
+DESCRIPTION:24th International Conference on Gas Discharges and their App
+ lications. Hosted by the Department of Electrical Engineering and Electr
+ onics. Conference enquiries: xue.yong@liverpool.ac.uk. Detailed programm
+ e to be announced.
+END:VEVENT
+END:VCALENDAR
