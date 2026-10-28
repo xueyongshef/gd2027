@@ -105,6 +105,14 @@ def topic_keywords():
     return ''.join(f'<li>{e(name)}</li>' for name, _ in TOPICS)
 
 
+def local_guide():
+    links = ''.join(
+        f'<li><a href="{e(attraction["url"])}" target="_blank" rel="noopener noreferrer"><span><strong>{e(attraction["title"])}</strong><small>{e(attraction["description"])}</small></span>{ARROW}</a></li>'
+        for attraction in DATA['local_attractions']
+    )
+    return f'''<aside class="abstract-note local-guide" aria-labelledby="local-guide-heading"><span class="eyebrow">Get to know your hosts</span><h3 id="local-guide-heading">Our department<br>& Liverpool.</h3><p>Meet our host department and discover places to explore during your visit to Liverpool.</p><a class="button" href="{e(DATA['department_about_url'])}" target="_blank" rel="noopener noreferrer">About our department {ARROW}</a><a class="text-link guide-research" href="{e(DATA['department_research_url'])}" target="_blank" rel="noopener noreferrer">Explore our research {ARROW}</a><div class="guide-city"><h4>Explore Liverpool</h4><ul class="guide-links" aria-label="Liverpool visitor attractions">{links}</ul></div></aside>'''
+
+
 def home():
     templates = ''.join([
         download_row('abstract_template', 'Abstract template', 'The conference abstract format'),
@@ -133,7 +141,7 @@ def home():
   <h3 class="cfp-subheading">Submission Templates</h3><div class="download-list">{templates}</div>
   <h3 class="cfp-subheading">Contact</h3><p>If you have any queries, please contact <a href="mailto:{e(DATA['email'])}">{e(DATA['email'])}</a>.</p></div>
   </article>
-  <aside class="abstract-note" aria-labelledby="notice-heading"><span class="eyebrow">Conference documents</span><h3 id="notice-heading">The conference<br>call for abstracts.</h3><p>Download the original conference invitation, including the scientific scope, submission information and contact details.</p><a class="button" href="{e(DATA['call_for_abstracts'])}" download>Download call for abstracts <span class="arrow" aria-hidden="true">↓</span></a><div class="cfp-quick-links"><a class="text-link" href="key-dates.html">All conference dates {FORWARD}</a><a class="text-link" href="{e(DATA['map_url'])}" target="_blank" rel="noopener noreferrer">View the university on Google Maps {ARROW}</a></div></aside>
+  {local_guide()}
 </div></section>
 <section class="city-band" aria-labelledby="city-heading"><img class="city-image" src="assets/images/liverpool-waterfront.jpg" alt="The Liverpool skyline across the River Mersey" loading="lazy" width="4320" height="2430"><div class="city-copy"><span class="eyebrow">Liverpool · United Kingdom</span><h2 id="city-heading">See you in Liverpool.</h2><p>Join us at the {e(DATA['university'])} for an international meeting of researchers and practitioners in gas discharges and their applications.</p><a class="text-link" href="venue.html">Discover the venue {FORWARD}</a></div></section>'''
 

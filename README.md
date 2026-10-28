@@ -75,6 +75,8 @@ python3 scripts/build_site.py
 
 首页直接展示征稿通知的会议介绍、研究范围、投稿要求、截止日期、模板状态和联系方式，并保留原始 Word 文件下载。模板尚未提供，因此将原稿中的链接占位符显示为待发布状态。
 
+首页右侧提供院系介绍、研究页面及利物浦景点的官方链接。这些链接和简短介绍在 `content/conference.json` 的 `department_about_url`、`department_research_url` 和 `local_attractions` 中维护。
+
 ## 图片来源
 
 首页顶部校园照片使用用户提供的 `figure/University-of-Liverpool-Image-Gallery-2.jpg.webp`，图片文件未改动。

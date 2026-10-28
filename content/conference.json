@@ -11,6 +11,40 @@
   "department": "Department of Electrical Engineering and Electronics",
   "email": "xue.yong@liverpool.ac.uk",
   "map_url": "https://www.google.com/maps/search/?api=1&query=University+of+Liverpool+Liverpool+United+Kingdom",
+  "department_about_url": "https://www.liverpool.ac.uk/electrical-engineering-and-electronics/about/",
+  "department_research_url": "https://www.liverpool.ac.uk/electrical-engineering-and-electronics/research/",
+  "local_attractions": [
+    {
+      "title": "Royal Albert Dock Liverpool",
+      "url": "https://albertdock.com/",
+      "description": "Historic docks, museums and waterfront dining."
+    },
+    {
+      "title": "Liverpool Waterfront & Pier Head",
+      "url": "https://www.visitliverpool.com/explore/liverpool-city-centre/waterfront/",
+      "description": "Discover the Three Graces and the city's waterfront."
+    },
+    {
+      "title": "Royal Liver Building 360",
+      "url": "https://liverbuildingtour.com/",
+      "description": "A landmark tower tour with views across the city and Mersey."
+    },
+    {
+      "title": "Mersey Ferries",
+      "url": "https://www.merseyferries.co.uk/our-cruises/liverpool-sightseeing-river-cruise/",
+      "description": "See Liverpool's skyline from the River Mersey."
+    },
+    {
+      "title": "Museum of Liverpool",
+      "url": "https://www.liverpoolmuseums.org.uk/museum-of-liverpool",
+      "description": "Explore the history of the city and its people."
+    },
+    {
+      "title": "World Museum",
+      "url": "https://www.liverpoolmuseums.org.uk/world-museum",
+      "description": "Discover the museum's collections and exhibitions."
+    }
+  ],
   "abstract_deadline": null,
   "full_paper_deadline": null,
   "registration_deadline": null,
