@@ -21,6 +21,7 @@ gd2027/
 │   ├── templates/               后续摘要和全文模板
 │   └── programme/               后续日程和会议手册
 ├── assets/                      图片、样式、手机菜单脚本
+├── figure/                      用户提供的校园照片，供首页顶部使用
 ├── content/conference.json      日期、联系人、下载路径等基础信息
 └── scripts/build_site.py        生成静态页面的脚本
 ```
@@ -72,7 +73,11 @@ python3 scripts/build_site.py
 
 会议基本资料依据用户提供的 `Call for abstract GD2027.docx`，日期为 **2027 年 9 月 12–17 日**。文稿中的 **24th** 届次原样保留。摘要截止日期、全文截止日期、注册安排、提交方式、模板、具体房间、交通住宿和详细日程尚待确认，网站未编造这些信息。
 
+首页直接展示征稿通知的会议介绍、研究范围、投稿要求、截止日期、模板状态和联系方式，并保留原始 Word 文件下载。模板尚未提供，因此将原稿中的链接占位符显示为待发布状态。
+
 ## 图片来源
+
+首页顶部校园照片使用用户提供的 `figure/University-of-Liverpool-Image-Gallery-2.jpg.webp`，图片文件未改动。
 
 `assets/images/liverpool-waterfront.jpg`：**Liverpool skyline from the Mersey Ferry - 2012-05-27.JPG**，作者 **Rept0n1x**，经 Wikimedia Commons 获取，**CC BY-SA 3.0**。
 

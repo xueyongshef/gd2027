@@ -3,6 +3,7 @@
 
 from datetime import date, datetime, timedelta, timezone
 from html import escape
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -74,12 +75,13 @@ def page(filename, title, description, main):
         'description': f"{DATA['title']}. {DATA['dates']}, {DATA['city']}, {DATA['country']}.",
     }
     structured_json = json.dumps(structured, ensure_ascii=False).replace('<', '\\u003c')
+    style_version = hashlib.sha256((ROOT / 'assets/css/style.css').read_bytes()).hexdigest()[:10]
     return f'''<!doctype html>
 <html lang="en-GB"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(title)} | GD2027 · Liverpool</title><meta name="description" content="{e(description)}">
 <meta name="theme-color" content="#112e3b"><meta property="og:title" content="{e(title)} | GD2027"><meta property="og:description" content="{e(description)}"><meta property="og:type" content="website">
-<link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="assets/css/style.css"><script src="assets/js/main.js" defer></script>
+<link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="assets/css/style.css?v={style_version}"><script src="assets/js/main.js" defer></script>
 <script type="application/ld+json">{structured_json}</script>
 <noscript><style>@media(max-width:800px){{.site-header{{position:static}}.header-inner{{flex-wrap:wrap;padding-block:18px}}.menu-toggle{{display:none}}.site-nav{{display:flex;position:static;flex-direction:row;flex-wrap:wrap;box-shadow:none;padding:0;border:0}}.site-nav a{{padding:8px 10px}}}}</style></noscript>
 </head><body>{header(filename)}<main id="main">{main}</main>{footer()}</body></html>
@@ -104,24 +106,34 @@ def topic_list():
 
 
 def home():
+    templates = ''.join([
+        download_row('abstract_template', 'Abstract template', 'The conference abstract format'),
+        download_row('full_paper_template', 'Full paper template', 'The conference paper format'),
+    ])
     return f'''<section class="hero" aria-labelledby="hero-heading">
-  <img class="hero-image" src="assets/images/liverpool-waterfront.jpg" alt="Liverpool waterfront and the Royal Liver Building, viewed across the River Mersey" fetchpriority="high" width="4320" height="2430">
+  <img class="hero-image" src="figure/University-of-Liverpool-Image-Gallery-2.jpg.webp" alt="Red-brick University of Liverpool campus buildings overlooking a green courtyard" fetchpriority="high" width="2200" height="1366">
   <div class="wrap"><span class="eyebrow">{e(DATA['edition'])} International Conference · GD2027</span><h1 id="hero-heading">Advancing gas<br>discharge <em>science.</em></h1>
   <p class="hero-title">{e(DATA['title'])}</p>
   <div class="hero-meta"><span>{icon('calendar')}{e(DATA['dates'])}</span><span>{icon('pin')}{e(DATA['city'])}, {e(DATA['country'])}</span></div>
-  <div class="hero-actions"><a class="button" href="submissions.html">Call for abstracts {ARROW}</a><a class="text-link" href="#welcome">Explore the conference <span class="arrow" aria-hidden="true">↓</span></a></div>
-  <div class="hero-caption">Our host city<strong>Liverpool, United Kingdom</strong></div></div>
+  <div class="hero-actions"><a class="button" href="#call-for-abstracts">Call for abstracts <span class="arrow" aria-hidden="true">↓</span></a><a class="text-link" href="{e(DATA['call_for_abstracts'])}" download>Download conference notice {ARROW}</a></div>
+  <div class="hero-caption">Our host university<strong>{e(DATA['university'])}</strong></div></div>
 </section>
 <section class="facts" aria-label="Conference at a glance"><div class="wrap">
   <div class="fact">{icon('calendar')}<div><span class="label">Save the date</span><strong>{e(DATA['dates'])}</strong></div></div>
   <div class="fact">{icon('pin')}<div><span class="label">Our host</span><strong>{e(DATA['university'])}</strong></div></div>
   <div class="fact">{icon('globe')}<div><span class="label">An international meeting</span><strong>Gas discharges & their applications</strong></div></div>
 </div></section>
-<section class="section" id="welcome" aria-labelledby="welcome-heading"><div class="wrap welcome-grid">
-  <div class="welcome-copy"><span class="eyebrow red">Welcome to GD2027</span><h2 id="welcome-heading">Connecting the science.<br>Inspiring the applications.</h2>
-  <div class="body-copy"><p>We are pleased to invite you to the {e(DATA['edition'])} {e(DATA['title'])}, taking place in {e(DATA['city'])}, {e(DATA['country'])}, from {e(DATA['dates'])}.</p><p>The conference will bring together researchers and practitioners working on gas discharges and their applications — from low- to high-pressure plasmas, and from thermal to non-thermal plasmas.</p></div>
-  <div class="host-note"><span>Hosted by</span>{e(DATA['department'])}<br>{e(DATA['university'])}</div></div>
-  <aside class="abstract-note" aria-labelledby="abstract-heading"><span class="eyebrow">Call for abstracts</span><h3 id="abstract-heading">Bring your research<br>to the conversation.</h3><p>We welcome abstracts on gas discharges and their applications. Find the conference notice and the latest submission information here.</p><div class="note-deadline"><span>Abstract deadline</span><strong>{deadline('abstract_deadline')}</strong></div><a class="text-link" href="submissions.html">Abstract information & downloads {FORWARD}</a></aside>
+<section class="section home-cfp" id="call-for-abstracts" aria-labelledby="cfp-heading"><div class="wrap welcome-grid">
+  <article class="welcome-copy"><span class="eyebrow red">Welcome to GD2027</span><h2 id="cfp-heading">Call for Abstracts</h2>
+  <div class="body-copy"><p>We are pleased to invite you to participate in the {e(DATA['edition'])} {e(DATA['title'])} ({e(DATA['short_name'])}), which will be held in {e(DATA['city'])}, {e(DATA['country'])}, {e(DATA['dates'])}.</p>
+  <p>The conference will be hosted by the {e(DATA['department'])} at the {e(DATA['university'])}.</p>
+  <p>The conference will bring together researchers and practitioners working on gas discharges and their applications. Topics span low- to high-pressure plasmas and thermal to non-thermal plasmas, with applications including pulsed-power technology, light sources, switchgear, environmental technologies and medicine.</p>
+  <h3 class="cfp-subheading">Abstract submissions</h3><p>We welcome abstracts on gas discharges and their applications. Submissions should follow the conference abstract template, which will be available below once published.</p>
+  <dl class="cfp-deadlines"><div><dt>Abstract submission deadline</dt><dd>{deadline('abstract_deadline')}</dd></div><div><dt>Full paper submission deadline</dt><dd>{deadline('full_paper_deadline')}</dd></div><div><dt>Registration deadline</dt><dd>{e(DATA.get('registration_deadline') or 'To be announced in due course.')}</dd></div></dl>
+  <h3 class="cfp-subheading">Submission Templates</h3><div class="download-list">{templates}</div>
+  <h3 class="cfp-subheading">Contact</h3><p>If you have any queries, please contact <a href="mailto:{e(DATA['email'])}">{e(DATA['email'])}</a>.</p></div>
+  </article>
+  <aside class="abstract-note" aria-labelledby="notice-heading"><span class="eyebrow">Conference documents</span><h3 id="notice-heading">The conference<br>call for abstracts.</h3><p>Download the original conference invitation, including the scientific scope, submission information and contact details.</p><a class="button" href="{e(DATA['call_for_abstracts'])}" download>Download call for abstracts <span class="arrow" aria-hidden="true">↓</span></a><div class="cfp-quick-links"><a class="text-link" href="key-dates.html">All conference dates {FORWARD}</a><a class="text-link" href="{e(DATA['map_url'])}" target="_blank" rel="noopener noreferrer">View the university on Google Maps {ARROW}</a></div></aside>
 </div></section>
 <section class="section topics-section" aria-labelledby="topics-heading"><div class="wrap"><div class="section-heading"><div><span class="eyebrow red">Science & applications</span><h2 id="topics-heading">A field of possibilities.</h2></div><a class="text-link" href="scientific-topics.html">Explore the scientific topics {FORWARD}</a></div><div class="topics-list">{topic_list()}</div></div></section>
 <section class="city-band" aria-labelledby="city-heading"><img class="city-image" src="assets/images/liverpool-waterfront.jpg" alt="The Liverpool skyline across the River Mersey" loading="lazy" width="4320" height="2430"><div class="city-copy"><span class="eyebrow">Liverpool · United Kingdom</span><h2 id="city-heading">See you in Liverpool.</h2><p>Join us at the {e(DATA['university'])} for an international meeting of researchers and practitioners in gas discharges and their applications.</p><a class="text-link" href="venue.html">Discover the venue {FORWARD}</a></div></section>'''
@@ -226,7 +238,7 @@ def main():
         dest.mkdir(exist_ok=True)
         for filename, *_ in pages:
             shutil.copy2(ROOT / filename, dest / filename)
-        for folder in ['assets', 'documents']:
+        for folder in ['assets', 'documents', 'figure']:
             shutil.copytree(ROOT / folder, dest / folder, dirs_exist_ok=True, ignore=shutil.ignore_patterns('README.md', '.gitkeep'))
         (dest / '.nojekyll').touch()
     print(f'Built {len(pages)} pages and the conference calendar.')
