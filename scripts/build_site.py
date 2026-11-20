@@ -118,7 +118,7 @@ def submission_milestones():
         else ('Release of full paper submission details', 'full_paper_release_date')
     )
     return [
-        ('Initial abstract submission deadline', 'abstract_deadline'),
+        ('Abstract submissions close', 'abstract_deadline'),
         paper_milestone,
         ('Early registration and payment deadline', 'early_registration_deadline'),
         ('Registration and payment deadline', 'registration_deadline'),
@@ -160,7 +160,6 @@ def home():
   <div class="fact">{icon('pin')}<div><span class="label">Our host</span><strong>{e(DATA['university'])}</strong></div></div>
   <div class="fact">{icon('globe')}<div><span class="label">An international meeting</span><strong>Gas discharges & their applications</strong></div></div>
 </div></section>
-{key_dates()}
 <section class="section" aria-labelledby="about-heading"><div class="wrap welcome-grid">
   <article class="welcome-copy"><h2 id="about-heading">About GD2027</h2>
   <div class="body-copy"><p>GD2027 will bring together researchers and practitioners at the {e(DATA['university'])} from {e(DATA['dates'])}. The {e(DATA['department'])} will host the conference.</p>
@@ -170,6 +169,7 @@ def home():
   </article>
   {local_guide()}
 </div></section>
+{key_dates()}
 <section class="city-band" aria-labelledby="city-heading"><img class="city-image" src="assets/images/liverpool-waterfront.jpg" alt="The Liverpool skyline across the River Mersey" loading="lazy" width="4320" height="2430"><div class="city-copy"><span class="eyebrow">Liverpool · United Kingdom</span><h2 id="city-heading">See you in Liverpool.</h2><p>Join us at the {e(DATA['university'])} for an international meeting of researchers and practitioners in gas discharges and their applications.</p><a class="text-link" href="venue.html">Discover the venue {FORWARD}</a></div></section>'''
 
 
@@ -181,8 +181,8 @@ def scientific_topics():
 
 def key_dates():
     milestones = [
-        ('launch_month', 'GD2027 website launch and opening of abstract submissions'),
-        ('abstract_deadline', 'Initial abstract submission deadline'),
+        ('launch_month', 'Abstract submissions open'),
+        ('abstract_deadline', 'Abstract submissions close'),
         ('abstract_notification_date', 'Abstract review, acceptance notifications and invitations to submit full papers'),
         ('full_paper_release_date', 'Release of full paper submission details'),
         ('full_paper_deadline', 'Full paper submission deadline'),
@@ -196,7 +196,7 @@ def key_dates():
         if key == 'full_paper_deadline' and not DATA.get(key):
             continue
         text = e(activity)
-        if key == 'abstract_deadline':
+        if key == 'launch_month':
             text = f'<a href="submissions.html">{text}</a>'
         rows.append(f'<tr><th scope="row">{deadline(key)}</th><td>{text}</td></tr>')
     return f'''<section class="section home-dates" id="key-dates" aria-labelledby="dates-heading"><div class="wrap">
