@@ -10,9 +10,9 @@ The XXIV International Conference on Gas Discharges and their Applications
 
 ```text
 gd2027/
-├── index.html                   首页
+├── index.html                   首页与重要日期
 ├── scientific-topics.html       会议主题
-├── key-dates.html               重要日期
+├── key-dates.html               旧链接，跳转至首页的重要日期
 ├── submissions.html             投稿与下载
 ├── venue.html                   会场信息
 ├── documents/                   所有会议文件集中放这里
@@ -71,9 +71,9 @@ python3 scripts/build_site.py
 
 ## 内容来源与待补充信息
 
-会议日期为 **2027 年 9 月 12–17 日**。当前征稿、审稿和注册日期以网站的 **Key dates** 页面为准。2027 年 4 月 30 日为全文投稿详情公布日期。具体投稿方式、会场房间、交通住宿和详细日程待公布。
+会议日期为 **2027 年 9 月 12–17 日**。当前征稿、审稿和注册日期见首页的 **Key dates**。2027 年 4 月 30 日为全文投稿详情公布日期。具体投稿方式、会场房间、交通住宿和详细日程待公布。
 
-首页展示当前征稿通知、会议介绍和联系方式。原始 Word 通知可在 **Abstracts & downloads** 页面下载查阅。摘要与全文继续使用 GD2026 的模板，研究范围沿用 GD2026 的主题。委员会和历届会议资料见 GD2023 的历史页面。[GD2026 投稿模板](https://www.gd2026.org.uk/abstract--full-paper-template-format.html) · [GD2026 科学主题](https://www.gd2026.org.uk/scientific-topics.html) · [GD2023 会议档案](https://www.inp-greifswald.de/en/news/events/events-detail/23rd-international-conference-on-gas-discharges-and-their-applications)
+首页的 **Abstract submission** 按钮链接到 **Abstracts & downloads** 页面，投稿模板和原始 Word 通知都可在该页面下载。摘要与全文继续使用 GD2026 的模板，研究范围沿用 GD2026 的主题。委员会和历届会议资料见 GD2023 的历史页面。[GD2026 投稿模板](https://www.gd2026.org.uk/abstract--full-paper-template-format.html) · [GD2026 科学主题](https://www.gd2026.org.uk/scientific-topics.html) · [GD2023 会议档案](https://www.inp-greifswald.de/en/news/events/events-detail/23rd-international-conference-on-gas-discharges-and-their-applications)
 
 首页右侧提供院系介绍、研究页面及利物浦景点的官方链接。这些链接和简短介绍在 `content/conference.json` 的 `department_about_url`、`department_research_url` 和 `local_attractions` 中维护。
 

@@ -90,8 +90,9 @@ p { margin-bottom: 1.25rem; }
 .fact .label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); margin-bottom: 3px; }
 .fact strong { display: block; font-size: 16px; font-weight: 600; line-height: 1.5; }
 .section { padding-block: 80px; }
-.welcome-grid { display: grid; grid-template-columns: 1.45fr 1fr; gap: 100px; align-items: start; }
+.welcome-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 80px; align-items: start; }
 .welcome-copy h2 { margin-bottom: 25px; }
+.welcome-copy h3 { font-family: var(--serif); font-size: 30px; font-weight: 400; color: var(--ink); margin: 32px 0 15px; }
 .body-copy { font-size: 17px; color: var(--muted); line-height: 1.9; }
 .host-note { border-left: 2px solid var(--red); margin-top: 28px; padding-left: 17px; font-size: 15px; line-height: 1.65; }
 .host-note span { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .14em; color: var(--red); margin-bottom: 6px; font-weight: 650; }
@@ -102,17 +103,7 @@ p { margin-bottom: 1.25rem; }
 .note-deadline { display: flex; justify-content: space-between; gap: 15px; font-size: 13px; border-block: 1px solid #cbd7d1; padding: 13px 0; margin: 24px 0; }
 .note-deadline strong { font-weight: 500; white-space: nowrap; }
 .abstract-note .text-link { color: #204a40; }
-.home-cfp .welcome-grid { grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 80px; }
-.cfp-subheading { font-family: var(--serif); font-size: 30px; font-weight: 400; color: var(--ink); margin: 32px 0 15px; }
-.cfp-deadlines { margin: 24px 0 16px; }
-.cfp-deadlines > div { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 22px; border-top: 1px solid var(--line); padding-block: 14px; font-size: 15px; }
-.cfp-deadlines > div:last-child { border-bottom: 1px solid var(--line); }
-.cfp-deadlines dt { color: var(--ink); }
-.cfp-deadlines dd { margin: 0; text-align: right; }
-.home-cfp .download-list { margin-top: 10px; }
-.home-cfp .abstract-note .button { margin-top: 10px; width: 100%; }
-.cfp-quick-links { border-top: 1px solid #cbd7d1; margin-top: 24px; padding-top: 20px; display: grid; gap: 14px; }
-.cfp-quick-links .text-link { font-size: 13px; }
+.local-guide .button { margin-top: 10px; width: 100%; }
 .local-guide .guide-research { display: flex; justify-content: space-between; margin-top: 18px; font-size: 15px; }
 .guide-city { margin-top: 30px; padding-top: 26px; border-top: 1px solid #cbd7d1; }
 .guide-city h4 { margin: 0 0 9px; font-family: var(--serif); font-weight: 400; font-size: 26px; line-height: 1.3; }
@@ -181,12 +172,14 @@ p { margin-bottom: 1.25rem; }
 .topic-detail h2 { font-family: var(--sans); font-size: 23px; letter-spacing: -.03em; font-weight: 550; margin-bottom: 11px; }
 .topic-detail p { font-size: 16px; color: var(--muted); margin-bottom: 0; }
 .bottom-note { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 25px; font-size: 15px; color: var(--muted); }
+.home-dates { border-bottom: 1px solid var(--line); }
 .date-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 1rem; }
 .date-table th, .date-table td { vertical-align: top; padding: 16px 0; border-bottom: 1px solid var(--line); }
 .date-table th:first-child { width: 34%; padding-inline-end: 20px; }
 .date-table thead th { padding-top: 0; border-color: #b7c1bd; color: var(--red-dark); }
 .date-table tbody th { font-weight: 600; }
 .date-table td { color: var(--muted); }
+.date-table td a { color: var(--ink); }
 .status { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: #697671; padding: 6px 10px; background: #eef0eb; white-space: nowrap; }
 .status::before { content: ''; width: 5px; height: 5px; background: #85938b; border-radius: 50%; }
 .download-list { margin-top: 32px; }
@@ -208,7 +201,7 @@ p { margin-bottom: 1.25rem; }
   .wrap { width: calc(100% - 64px); }
   .site-nav { gap: 20px; }
   .site-nav a { font-size: 13px; }
-  .welcome-grid, .home-cfp .welcome-grid { gap: 55px; }
+  .welcome-grid { gap: 55px; }
   .hero { min-height: 550px; }
   .hero-caption { right: 0; }
   .hero-keywords { position: static; width: 100%; max-width: 680px; margin-top: 30px; padding: 19px 0 0; border-left: 0; border-top: 1px solid #6a8188; background: none; }
@@ -243,7 +236,7 @@ p { margin-bottom: 1.25rem; }
   .fact strong { font-size: 13px; }
   .fact .label { font-size: 10px; }
   .fact svg { width: 21px; height: 21px; }
-  .welcome-grid, .home-cfp .welcome-grid { grid-template-columns: 1fr; gap: 36px; }
+  .welcome-grid { grid-template-columns: 1fr; gap: 36px; }
   .welcome-copy h2 { max-width: 550px; }
   .abstract-note { padding: 28px; }
   .section { padding-block: 55px; }
