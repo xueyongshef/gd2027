@@ -1,6 +1,6 @@
 {
   "short_name": "GD2027",
-  "edition": "24th",
+  "edition": "XXIV",
   "title": "International Conference on Gas Discharges and their Applications",
   "dates": "12–17 September 2027",
   "start_date": "2027-09-12",
@@ -45,11 +45,20 @@
       "description": "Discover the museum's collections and exhibitions."
     }
   ],
-  "abstract_deadline": null,
+  "launch_month": "November 2026",
+  "abstract_deadline": "31 January 2027",
+  "abstract_notification_date": "28 February 2027",
+  "full_paper_release_date": "30 April 2027",
   "full_paper_deadline": null,
-  "registration_deadline": null,
+  "full_paper_notification_date": "31 May 2027",
+  "early_registration_deadline": "31 July 2027",
+  "registration_deadline": "13 August 2027",
   "registration_url": "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=MVElUymxEECG4UdL_X6AdhDhi7ACoJ5Oofj2np8QZvdUQk5DSDA5MzRRNlBFSkhVM005MzdXSk5IQy4u",
   "call_for_abstracts": "documents/gd2027-call-for-abstracts.docx",
   "abstract_template": null,
-  "full_paper_template": null
+  "full_paper_template": null,
+  "abstract_template_url": "https://www.gd2026.org.uk/uploads/9/5/0/7/95077800/gd2026_abstract_template.doc",
+  "full_paper_template_url": "https://www.gd2026.org.uk/uploads/9/5/0/7/95077800/paper_template_gd2026_word.doc",
+  "scientific_topics_url": "https://www.gd2026.org.uk/scientific-topics.html",
+  "conference_history_url": "https://www.inp-greifswald.de/en/news/events/events-detail/23rd-international-conference-on-gas-discharges-and-their-applications"
 }

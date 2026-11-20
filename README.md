@@ -1,6 +1,6 @@
 # GD2027 conference website
 
-24th International Conference on Gas Discharges and their Applications
+The XXIV International Conference on Gas Discharges and their Applications
 
 **12–17 September 2027 · University of Liverpool · United Kingdom**
 
@@ -18,7 +18,7 @@ gd2027/
 ├── documents/                   所有会议文件集中放这里
 │   ├── gd2027-call-for-abstracts.docx  原始征稿通知（内容未改动）
 │   ├── gd2027-conference.ics     日历文件（自动生成）
-│   ├── templates/               后续摘要和全文模板
+│   ├── templates/               会议专用模板的本地存放目录
 │   └── programme/               后续日程和会议手册
 ├── assets/                      图片、样式、手机菜单脚本
 ├── figure/                      用户提供的校园照片，供首页顶部使用
@@ -39,8 +39,8 @@ python3 -m http.server 8000 --bind 127.0.0.1
 ## 修改会议资料
 
 1. 编辑 `content/conference.json`：会议日期、联系人、截止日期和下载文件路径均在这里。
-2. `null` 表示尚未公布，网站会自动显示待定或待发布。
-3. 新文件先放入 `documents/` 对应子文件夹，再在配置中填写路径。例如：
+2. 日期尚未公布时可填写 `null`。模板可以使用本地文件或外部链接。
+3. 新文件先放入 `documents/` 对应子文件夹，再在配置中填写路径。本地模板路径优先于对应的外部模板链接。例如：
 
 ```json
 "abstract_deadline": "15 February 2027",
@@ -71,9 +71,9 @@ python3 scripts/build_site.py
 
 ## 内容来源与待补充信息
 
-会议基本资料依据用户提供的 `Call for abstract GD2027.docx`，日期为 **2027 年 9 月 12–17 日**。文稿中的 **24th** 届次原样保留。摘要截止日期、全文截止日期、注册安排、提交方式、模板、具体房间、交通住宿和详细日程尚待确认，网站未编造这些信息。
+会议日期为 **2027 年 9 月 12–17 日**。当前征稿、审稿和注册日期以网站的 **Key dates** 页面为准。2027 年 4 月 30 日为全文投稿详情公布日期。具体投稿方式、会场房间、交通住宿和详细日程待公布。
 
-首页直接展示征稿通知的会议介绍、研究范围、投稿要求、截止日期、模板状态和联系方式，并保留原始 Word 文件下载。模板尚未提供，因此将原稿中的链接占位符显示为待发布状态。
+首页展示当前征稿通知、会议介绍和联系方式。原始 Word 通知可在 **Abstracts & downloads** 页面下载查阅。摘要与全文继续使用 GD2026 的模板，研究范围沿用 GD2026 的主题。委员会和历届会议资料见 GD2023 的历史页面。[GD2026 投稿模板](https://www.gd2026.org.uk/abstract--full-paper-template-format.html) · [GD2026 科学主题](https://www.gd2026.org.uk/scientific-topics.html) · [GD2023 会议档案](https://www.inp-greifswald.de/en/news/events/events-detail/23rd-international-conference-on-gas-discharges-and-their-applications)
 
 首页右侧提供院系介绍、研究页面及利物浦景点的官方链接。这些链接和简短介绍在 `content/conference.json` 的 `department_about_url`、`department_research_url` 和 `local_attractions` 中维护。
 

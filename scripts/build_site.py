@@ -12,6 +12,7 @@ from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = json.loads((ROOT / 'content/conference.json').read_text(encoding='utf-8'))
+CONFERENCE_NAME = f"The {DATA['edition']} {DATA['title']}"
 
 
 def e(value):
@@ -33,13 +34,24 @@ ARROW = '<span class="arrow" aria-hidden="true">↗</span>'
 FORWARD = '<span class="arrow" aria-hidden="true">→</span>'
 LOGO = '<svg class="brand-symbol" viewBox="0 0 48 48" fill="none" aria-hidden="true"><ellipse cx="24" cy="24" rx="22" ry="8.5" transform="rotate(-45 24 24)" stroke="currentColor" stroke-width="1.3"/><ellipse cx="24" cy="24" rx="22" ry="8.5" transform="rotate(45 24 24)" stroke="currentColor" stroke-width="1.3"/><circle cx="24" cy="24" r="3" fill="currentColor"/></svg>'
 NAV = [('index.html', 'Home'), ('scientific-topics.html', 'Scientific topics'), ('key-dates.html', 'Key dates'), ('submissions.html', 'Abstracts & downloads'), ('venue.html', 'Venue')]
+TOPIC_KEYWORDS = [
+    'Gas discharges & plasmas', 'Pulsed-power technology', 'Light sources',
+    'Switchgear', 'Environmental technologies', 'Medical applications',
+]
 TOPICS = [
-    ('Gas discharges & plasmas', 'Gas discharges from low to high pressure, spanning thermal and non-thermal plasmas.'),
-    ('Pulsed-power technology', 'Gas discharges and their applications in pulsed-power technology.'),
-    ('Light sources', 'Gas discharges and plasma applications in light sources.'),
-    ('Switchgear', 'Gas discharges and their applications in switchgear.'),
-    ('Environmental technologies', 'Plasma and gas-discharge applications in environmental technologies.'),
-    ('Medical applications', 'Gas discharges and plasmas for medical applications.'),
+    ('Arc discharges', 'Arc formation, behaviour and applications, including in switchgear.'),
+    ('Corona, barrier and surface discharges', 'Discharges in non-uniform fields, across dielectric barriers and along surfaces.'),
+    ('Glow discharges and breakdown', 'The onset of electrical breakdown and the conditions that sustain glow discharges.'),
+    ('High-pressure plasmas', 'The physics and applications of plasmas at elevated pressures.'),
+    ('Low-pressure plasmas', 'Low-pressure discharge processes and their applications.'),
+    ('Environmental and medical applications', 'Use of discharges and plasmas in environmental technologies and medicine.'),
+    ('Pulsed power', 'Pulsed-power technology and its applications in gas-discharge systems.'),
+    ('Light sources', 'Light generation using gas discharges and plasmas.'),
+    ('Lightning', 'Natural atmospheric electrical discharges.'),
+    ('Testing and diagnostics', 'Techniques for testing and characterising gas discharges and plasmas.'),
+    ('Fundamental processes and cross-sections', 'Collisions and other elementary processes that govern gas discharges.'),
+    ('Emerging applications', 'New and developing uses of gas discharges.'),
+    ('Measurement techniques', 'Methods for measuring discharge and plasma properties.'),
 ]
 
 
@@ -61,7 +73,7 @@ def header(active):
 def footer():
     return f'''<section class="contact-strip" aria-labelledby="contact-heading"><div class="wrap"><div><h2 id="contact-heading">Let’s stay connected.</h2><p>For conference enquiries, please contact the organising team.</p></div><a href="mailto:{e(DATA['email'])}">{e(DATA['email'])} {ARROW}</a></div></section>
 <footer class="site-footer"><div class="wrap">
-  <div class="footer-main"><div><div class="footer-title">GD2027</div><p>{e(DATA['edition'])} {e(DATA['title'])}<br>{e(DATA['dates'])} · {e(DATA['city'])}, {e(DATA['country'])}</p></div><nav class="footer-links" aria-label="Footer navigation"><a href="submissions.html">Abstracts & downloads</a><a href="key-dates.html">Key dates</a><a href="venue.html">Venue</a></nav></div>
+  <div class="footer-main"><div><div class="footer-title">GD2027</div><p>{e(CONFERENCE_NAME)}<br>{e(DATA['dates'])} · {e(DATA['city'])}, {e(DATA['country'])}</p></div><nav class="footer-links" aria-label="Footer navigation"><a href="submissions.html">Abstracts & downloads</a><a href="key-dates.html">Key dates</a><a href="venue.html">Venue</a></nav></div>
   <div class="footer-bottom"><p>Hosted by the {e(DATA['department'])}, {e(DATA['university'])}.</p><p>Waterfront photograph: <a href="https://commons.wikimedia.org/wiki/File:Liverpool_skyline_from_the_Mersey_Ferry_-_2012-05-27.JPG" target="_blank" rel="noopener noreferrer">Rept0n1x / Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a></p></div>
 </div></footer>'''
 
@@ -69,12 +81,12 @@ def footer():
 def page(filename, title, description, main):
     structured = {
         '@context': 'https://schema.org', '@type': 'Event',
-        'name': f"{DATA['edition']} {DATA['title']} ({DATA['short_name']})",
+        'name': f"{CONFERENCE_NAME} ({DATA['short_name']})",
         'startDate': DATA['start_date'], 'endDate': DATA['end_date'],
         'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
         'location': {'@type': 'Place', 'name': DATA['university'], 'address': {'@type': 'PostalAddress', 'addressLocality': DATA['city'], 'addressCountry': 'GB'}},
         'organizer': {'@type': 'Organization', 'name': f"{DATA['department']}, {DATA['university']}", 'email': DATA['email']},
-        'description': f"{DATA['title']}. {DATA['dates']}, {DATA['city']}, {DATA['country']}.",
+        'description': f"{CONFERENCE_NAME}. {DATA['dates']}, {DATA['city']}, {DATA['country']}.",
     }
     structured_json = json.dumps(structured, ensure_ascii=False).replace('<', '\\u003c')
     style_version = hashlib.sha256((ROOT / 'assets/css/style.css').read_bytes()).hexdigest()[:10]
@@ -99,13 +111,21 @@ def deadline(key):
     return e(DATA.get(key) or 'To be confirmed')
 
 
-def status(key):
-    value = DATA.get(key)
-    return f'<span class="status{" confirmed" if value else ""}">{e(value or "To be confirmed")}</span>'
+def submission_milestones():
+    paper_milestone = (
+        ('Full paper submission deadline', 'full_paper_deadline') if DATA.get('full_paper_deadline')
+        else ('Release of full paper submission details', 'full_paper_release_date')
+    )
+    return [
+        ('Initial abstract submission deadline', 'abstract_deadline'),
+        paper_milestone,
+        ('Early registration and payment deadline', 'early_registration_deadline'),
+        ('Registration and payment deadline', 'registration_deadline'),
+    ]
 
 
 def topic_keywords():
-    return ''.join(f'<li>{e(name)}</li>' for name, _ in TOPICS)
+    return ''.join(f'<li>{e(name)}</li>' for name in TOPIC_KEYWORDS)
 
 
 def registration_link(label, cls):
@@ -127,16 +147,15 @@ def local_guide():
 
 
 def home():
-    templates = ''.join([
-        download_row('abstract_template', 'Abstract template', 'The conference abstract format'),
-        download_row('full_paper_template', 'Full paper template', 'The conference paper format'),
-    ])
+    milestones = ''.join(
+        f'<div><dt>{e(label)}</dt><dd>{deadline(key)}</dd></div>'
+        for label, key in submission_milestones()
+    )
     return f'''<section class="hero" aria-labelledby="hero-heading">
   <img class="hero-image" src="figure/University-of-Liverpool-Image-Gallery-2.jpg.webp" alt="Red-brick University of Liverpool campus buildings overlooking a green courtyard" fetchpriority="high" width="2200" height="1366">
-  <div class="wrap"><span class="eyebrow">{e(DATA['edition'])} International Conference · GD2027</span><h1 id="hero-heading">Advancing gas<br>discharge <em>science.</em></h1>
-  <p class="hero-title">{e(DATA['title'])}</p>
+  <div class="wrap"><span class="eyebrow">{e(DATA['short_name'])}</span><h1 id="hero-heading">{e(CONFERENCE_NAME)}</h1>
   <div class="hero-meta"><span>{icon('calendar')}{e(DATA['dates'])}</span><span>{icon('pin')}{e(DATA['city'])}, {e(DATA['country'])}</span></div>
-  <div class="hero-actions"><a class="button" href="#call-for-abstracts">Call for abstracts <span class="arrow" aria-hidden="true">↓</span></a>{registration_link('Register', 'button hero-register')}<a class="text-link" href="{e(DATA['call_for_abstracts'])}" download>Download conference notice {ARROW}</a></div>
+  <div class="hero-actions"><a class="button" href="#call-for-abstracts">Call for abstracts</a>{registration_link('Register', 'button hero-register')}<a class="text-link" href="key-dates.html">Key dates</a></div>
   <div class="hero-keywords"><span class="eyebrow">Scientific keywords</span><ul aria-label="Scientific keywords">{topic_keywords()}</ul></div></div>
 </section>
 <section class="facts" aria-label="Conference at a glance"><div class="wrap">
@@ -146,12 +165,14 @@ def home():
 </div></section>
 <section class="section home-cfp" id="call-for-abstracts" aria-labelledby="cfp-heading"><div class="wrap welcome-grid">
   <article class="welcome-copy"><span class="eyebrow red">Welcome to GD2027</span><h2 id="cfp-heading">Call for Abstracts</h2>
-  <div class="body-copy"><p>We are pleased to invite you to participate in the {e(DATA['edition'])} {e(DATA['title'])} ({e(DATA['short_name'])}), which will be held in {e(DATA['city'])}, {e(DATA['country'])}, {e(DATA['dates'])}.</p>
-  <p>The conference will be hosted by the {e(DATA['department'])} at the {e(DATA['university'])}.</p>
-  <p>The conference will bring together researchers and practitioners working on gas discharges and their applications. Topics span low- to high-pressure plasmas and thermal to non-thermal plasmas, with applications including pulsed-power technology, light sources, switchgear, environmental technologies and medicine.</p>
-  <h3 class="cfp-subheading">Abstract submissions</h3><p>We welcome abstracts on gas discharges and their applications. Submissions should follow the conference abstract template, which will be available below once published.</p>
-  <dl class="cfp-deadlines"><div><dt>Abstract submission deadline</dt><dd>{deadline('abstract_deadline')}</dd></div><div><dt>Full paper submission deadline</dt><dd>{deadline('full_paper_deadline')}</dd></div><div><dt>Registration deadline</dt><dd>{e(DATA.get('registration_deadline') or 'To be announced in due course.')}</dd></div></dl>
-  <h3 class="cfp-subheading">Submission Templates</h3><div class="download-list">{templates}</div>
+  <div class="body-copy"><p>GD2027 will bring together researchers and practitioners at the {e(DATA['university'])} from {e(DATA['dates'])}. The {e(DATA['department'])} will host the conference.</p>
+  <p>The series covers gas discharges across a range of pressures and temperatures, including thermal and non-thermal plasmas. Applications include pulsed power, lighting, switchgear, environmental technologies and medicine.</p>
+  <p><a href="scientific-topics.html">View the scientific topics</a>.</p>
+  <h3 class="cfp-subheading">Conference series and committees</h3><p>The 23rd conference took place in Greifswald, Germany, in 2023. Its archive records earlier meetings and lists the 2023 membership of the International Scientific Committee (ISC) and Executive Management Committee (EMC). <a href="{e(DATA['conference_history_url'])}">GD2023 archive at INP Greifswald</a></p>
+  <h3 class="cfp-subheading">Abstract submissions</h3><p>Prepare your abstract using the template below. Authors of accepted abstracts will be invited to submit a full paper.</p>
+  <dl class="cfp-deadlines">{milestones}</dl>
+  <p><a href="key-dates.html">View the full schedule</a>.</p>
+  <h3 class="cfp-subheading">Submission templates</h3><div class="download-list">{template_downloads()}</div>
   <h3 class="cfp-subheading">Contact</h3><p>If you have any queries, please contact <a href="mailto:{e(DATA['email'])}">{e(DATA['email'])}</a>.</p></div>
   </article>
   {local_guide()}
@@ -161,24 +182,33 @@ def home():
 
 def scientific_topics():
     heading = page_heading('Scientific topics', 'From fundamental science<br>to practical applications.', 'GD2027 explores gas discharges across pressure regimes, from thermal to non-thermal plasmas, and the technologies they make possible.')
-    details = ''.join(f'<article class="topic-detail"><span class="topic-number">{i:02d}</span><div><h2>{name}</h2><p>{description}</p></div></article>' for i, (name, description) in enumerate(TOPICS, 1))
-    return heading + f'''<section class="page-content"><div class="wrap"><div class="topic-details">{details}</div><p class="bottom-note">These areas reflect the conference call for abstracts. Detailed programme information will be announced in due course.</p><a class="button" href="submissions.html">Abstract information {ARROW}</a></div></section>'''
+    details = ''.join(f'<article class="topic-detail"><h2>{e(name)}</h2><p>{e(description)}</p></article>' for name, description in TOPICS)
+    return heading + f'''<section class="page-content"><div class="wrap"><div class="topic-details">{details}</div><p class="bottom-note">The <a href="{e(DATA['scientific_topics_url'])}">GD2026 scientific topics</a> also apply to GD2027.</p><a class="button" href="submissions.html">Abstract information</a></div></section>'''
 
 
 def key_dates():
-    heading = page_heading('Key dates', 'Your dates for GD2027.', 'Keep track of the conference and submission milestones. Dates that have not yet been announced are clearly marked below.')
+    heading = page_heading('Key dates', 'GD2027 schedule', 'Submission, review, registration and conference dates.')
     milestones = [
-        ('Abstract submission', 'Deadline for conference abstracts.', status('abstract_deadline')),
-        ('Full paper submission', 'Deadline for full conference papers.', status('full_paper_deadline')),
-        ('Registration', 'Registration deadline to be announced in due course.', status('registration_deadline')),
-        ('GD2027 conference', f"{e(DATA['university'])}, {e(DATA['city'])}, {e(DATA['country'])}.", f'<span class="status confirmed">{e(DATA["dates"])}</span>'),
+        ('launch_month', 'GD2027 website launch and call for abstracts'),
+        ('abstract_deadline', 'Initial abstract submission deadline'),
+        ('abstract_notification_date', 'Abstract review, acceptance notifications and invitations to submit full papers'),
+        ('full_paper_release_date', 'Release of full paper submission details'),
+        ('full_paper_deadline', 'Full paper submission deadline'),
+        ('full_paper_notification_date', 'Full paper review and notification of decisions'),
+        ('early_registration_deadline', 'Early registration and payment deadline'),
+        ('registration_deadline', 'Registration and payment deadline'),
+        ('dates', 'GD2027 conference at the University of Liverpool'),
     ]
-    rows = ''.join(f'<li class="date-item"><span class="date-index">{i:02d}</span><div><h2>{title}</h2><p>{description}</p></div>{badge}</li>' for i, (title, description, badge) in enumerate(milestones, 1))
-    return heading + f'''<section class="page-content"><div class="wrap content-grid"><div><ol class="date-list">{rows}</ol><div class="info-note">Submission and registration deadlines will be updated here when confirmed by the organisers.</div></div><aside class="detail-panel"><span class="eyebrow red">Save the date</span><h2>Meet us<br>in Liverpool.</h2><div class="detail-row"><span class="label">Conference dates</span>{e(DATA['dates'])}</div><div class="detail-row"><span class="label">Location</span>{e(DATA['university'])}<br>{e(DATA['city'])}, {e(DATA['country'])}</div><a class="button light" href="documents/gd2027-conference.ics" download>Add to calendar {ARROW}</a></aside></div></section>'''
+    rows = ''.join(
+        f'<tr><th scope="row">{deadline(key)}</th><td>{e(activity)}</td></tr>'
+        for key, activity in milestones if key != 'full_paper_deadline' or DATA.get(key)
+    )
+    return heading + f'''<section class="page-content"><div class="wrap content-grid"><div><table class="date-table" aria-label="GD2027 dates and activities"><thead><tr><th scope="col">Dates</th><th scope="col">Activities</th></tr></thead><tbody>{rows}</tbody></table></div><aside class="detail-panel"><span class="eyebrow red">Save the date</span><h2>Meet us<br>in Liverpool.</h2><div class="detail-row"><span class="label">Conference dates</span>{e(DATA['dates'])}</div><div class="detail-row"><span class="label">Location</span>{e(DATA['university'])}<br>{e(DATA['city'])}, {e(DATA['country'])}</div><a class="button light" href="documents/gd2027-conference.ics" download>Add to calendar</a></aside></div></section>'''
 
 
 def download_row(key, title, explanation):
     path = DATA.get(key)
+    url = DATA.get(f'{key}_url')
     if path:
         resolved = ROOT / path
         if not resolved.is_file() or not resolved.resolve().is_relative_to((ROOT / 'documents').resolve()):
@@ -186,30 +216,40 @@ def download_row(key, title, explanation):
         size = max(1, round(resolved.stat().st_size / 1024))
         kind = resolved.suffix.lstrip('.').upper()
         description = f'{e(explanation)} · {kind} · {size} KB'
-        action = f'<a class="text-link" href="{e(path)}" download aria-label="Download {e(title)}">Download <span class="arrow" aria-hidden="true">↓</span></a>'
+        action = f'<a class="text-link" href="{e(path)}" download aria-label="Download {e(title)}">Download</a>'
+    elif url:
+        description = 'GD2026 format accepted for GD2027 · DOC'
+        action = f'<a class="text-link" href="{e(url)}" aria-label="Download {e(title)}">Download</a>'
     else:
         description = e(explanation)
         action = '<span class="status">To be published</span>'
     return f'<div class="download-row"><div class="download-icon">{icon("file", "file-icon")}<div><h3>{e(title)}</h3><p>{description}</p></div></div>{action}</div>'
 
 
+def template_downloads():
+    return ''.join([
+        download_row('abstract_template', 'Abstract template', 'Format for conference abstracts'),
+        download_row('full_paper_template', 'Full paper template', 'Format for conference papers'),
+    ])
+
+
 def submissions():
     heading = page_heading('Abstracts & downloads', 'Share your research.', 'We welcome abstracts on gas discharges and their applications. Read the call for abstracts and find conference documents below.')
-    downloads = ''.join([
-        download_row('call_for_abstracts', 'Call for abstracts', 'Conference invitation and overview'),
-        download_row('abstract_template', 'Abstract template', 'The conference abstract format'),
-        download_row('full_paper_template', 'Full paper template', 'The conference paper format'),
-    ])
-    return heading + f'''<section class="page-content"><div class="wrap content-grid"><div><h2>Conference documents</h2><p>Submissions should follow the conference abstract template. The abstract and full paper templates will be made available here once published.</p><div class="download-list">{downloads}</div>
-  <div class="steps"><h2>Preparing your submission</h2><div class="step"><span class="step-number">1</span><div><h3>Read the call for abstracts</h3><p>Download the conference notice for the scientific scope, dates and contact details.</p></div></div><div class="step"><span class="step-number">2</span><div><h3>Use the conference template</h3><p>Prepare your abstract using the official template when it becomes available.</p></div></div><div class="step"><span class="step-number">3</span><div><h3>Check the submission instructions</h3><p>The submission method and final deadlines will be published here when confirmed.</p></div></div></div>
-  </div><aside><div class="detail-panel"><span class="eyebrow red">Submission milestones</span><h3>Plan your contribution.</h3><div class="detail-row"><span class="label">Abstract deadline</span>{deadline('abstract_deadline')}</div><div class="detail-row"><span class="label">Full paper deadline</span>{deadline('full_paper_deadline')}</div><div class="detail-row"><span class="label">Registration deadline</span>{e(DATA.get('registration_deadline') or 'To be announced')}</div><a class="button light" href="key-dates.html">All key dates {FORWARD}</a></div><div class="info-note">Questions about the conference?<br><a href="mailto:{e(DATA['email'])}">Contact the organising team</a>.</div></aside>
+    milestones = ''.join(
+        f'<div class="detail-row"><span class="label">{e(label)}</span>{deadline(key)}</div>'
+        for label, key in submission_milestones()
+    )
+    notice = download_row('call_for_abstracts', 'Original conference notice', 'Archived Word announcement. See the key dates for the current schedule.')
+    return heading + f'''<section class="page-content"><div class="wrap content-grid"><div><h2>Submission templates</h2><p>Use the abstract template below to prepare your submission. Authors of accepted abstracts will be invited to submit a full paper.</p><div class="download-list">{template_downloads()}</div>
+  <div class="submission-notice"><h2>Call for abstracts</h2><p>Read the <a href="index.html#call-for-abstracts">current call for abstracts</a> and explore the <a href="scientific-topics.html">scientific topics</a>. Contact the organising team for submission instructions.</p>{notice}</div>
+  </div><aside><div class="detail-panel"><h2>Deadlines and updates</h2>{milestones}<a class="button light" href="key-dates.html">All key dates</a></div><div class="info-note"><a href="mailto:{e(DATA['email'])}">Contact the organising team</a></div></aside>
 </div></section>'''
 
 
 def venue():
     heading = page_heading('Venue', 'Liverpool.<br>A place to connect.', f"GD2027 will be hosted by the {e(DATA['department'])} at the {e(DATA['university'])}, {e(DATA['city'])}, {e(DATA['country'])}.")
     return heading + f'''<section class="page-content"><div class="wrap"><figure class="venue-photo"><img src="assets/images/liverpool-waterfront.jpg" alt="Liverpool waterfront, including the Royal Liver Building, viewed from the Mersey" width="4320" height="2430"><figcaption>Liverpool waterfront. Photograph by <a href="https://commons.wikimedia.org/wiki/File:Liverpool_skyline_from_the_Mersey_Ferry_-_2012-05-27.JPG" target="_blank" rel="noopener noreferrer">Rept0n1x / Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a>.</figcaption></figure>
-  <div class="content-grid"><div class="venue-copy"><span class="eyebrow red">Our host</span><h2>{e(DATA['university'])}</h2><p>We look forward to welcoming researchers and practitioners to {e(DATA['city'])} for the {e(DATA['edition'])} {e(DATA['title'])}.</p><p>The conference will take place from {e(DATA['dates'])} and will be hosted by the {e(DATA['department'])}.</p><h3>Planning your visit</h3><p>Detailed information about conference rooms, travel and accommodation will be published here as arrangements are confirmed.</p><a class="button light" href="{e(DATA['map_url'])}" target="_blank" rel="noopener noreferrer">View the university on Google Maps {ARROW}</a></div>
+  <div class="content-grid"><div class="venue-copy"><span class="eyebrow red">Our host</span><h2>{e(DATA['university'])}</h2><p>We look forward to welcoming researchers and practitioners to {e(DATA['city'])} for GD2027.</p><p>The conference will take place from {e(DATA['dates'])} and will be hosted by the {e(DATA['department'])}.</p><h3>Planning your visit</h3><p>Detailed information about conference rooms, travel and accommodation will be published here as arrangements are confirmed.</p><a class="button light" href="{e(DATA['map_url'])}" target="_blank" rel="noopener noreferrer">View the university on Google Maps {ARROW}</a></div>
   <aside class="detail-panel"><span class="eyebrow red">At a glance</span><div class="detail-row"><span class="label">When</span>{e(DATA['dates'])}</div><div class="detail-row"><span class="label">Host institution</span>{e(DATA['university'])}</div><div class="detail-row"><span class="label">Host department</span>{e(DATA['department'])}</div><div class="detail-row"><span class="label">City</span>{e(DATA['city'])}, {e(DATA['country'])}</div><div class="detail-row"><span class="label">Enquiries</span><a href="mailto:{e(DATA['email'])}">{e(DATA['email'])}</a></div></aside></div>
 </div></section>'''
 
@@ -224,9 +264,9 @@ def calendar():
         'BEGIN:VEVENT', 'UID:gd2027-conference@xueyongshef.github.io',
         'DTSTAMP:' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ'),
         'DTSTART;VALUE=DATE:' + start.strftime('%Y%m%d'), 'DTEND;VALUE=DATE:' + end_exclusive.strftime('%Y%m%d'),
-        'SUMMARY:' + ics_escape(DATA['short_name'] + ' — ' + DATA['title']),
+        'SUMMARY:' + ics_escape(f"{CONFERENCE_NAME} ({DATA['short_name']})"),
         'LOCATION:' + ics_escape(f"{DATA['university']}, {DATA['city']}, {DATA['country']}"),
-        'DESCRIPTION:' + ics_escape(f"{DATA['edition']} {DATA['title']}. Hosted by the {DATA['department']}. Conference enquiries: {DATA['email']}. Detailed programme to be announced."),
+        'DESCRIPTION:' + ics_escape(f"Hosted by the {DATA['department']}. Conference enquiries: {DATA['email']}. Detailed programme to be announced."),
         'END:VEVENT', 'END:VCALENDAR',
     ]
     folded = []
@@ -243,9 +283,9 @@ def calendar():
 
 def main():
     pages = [
-        ('index.html', 'Gas Discharges and their Applications', 'GD2027: the 24th International Conference on Gas Discharges and their Applications, 12–17 September 2027, University of Liverpool, United Kingdom.', home()),
+        ('index.html', CONFERENCE_NAME, f"{CONFERENCE_NAME} (GD2027), {DATA['dates']}, {DATA['university']}, {DATA['country']}.", home()),
         ('scientific-topics.html', 'Scientific topics', 'Explore the scientific scope of GD2027: gas discharges, thermal and non-thermal plasmas, pulsed power, light sources, switchgear, environmental and medical applications.', scientific_topics()),
-        ('key-dates.html', 'Key dates', 'Conference dates and submission milestones for GD2027, Liverpool, 12–17 September 2027. Abstract, full paper and registration deadlines will be confirmed.', key_dates()),
+        ('key-dates.html', 'Key dates', 'Find the GD2027 abstract deadline, review milestones, registration and payment deadlines, and conference dates.', key_dates()),
         ('submissions.html', 'Abstracts & downloads', 'Download the GD2027 call for abstracts and find the latest information on abstract and full paper templates, deadlines and submissions.', submissions()),
         ('venue.html', 'Venue', 'GD2027 at the University of Liverpool, hosted by the Department of Electrical Engineering and Electronics, 12–17 September 2027.', venue()),
     ]
