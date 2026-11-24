@@ -160,16 +160,15 @@ def home():
   <div class="fact">{icon('pin')}<div><span class="label">Our host</span><strong>{e(DATA['university'])}</strong></div></div>
   <div class="fact">{icon('globe')}<div><span class="label">An international meeting</span><strong>Gas discharges & their applications</strong></div></div>
 </div></section>
-<section class="section" aria-labelledby="about-heading"><div class="wrap welcome-grid">
+<section class="section about-section" aria-labelledby="about-heading"><div class="wrap welcome-grid">
   <article class="welcome-copy"><h2 id="about-heading">About GD2027</h2>
   <div class="body-copy"><p>GD2027 will bring together researchers and practitioners at the {e(DATA['university'])} from {e(DATA['dates'])}. The {e(DATA['department'])} will host the conference.</p>
   <p>The series covers gas discharges across a range of pressures and temperatures, including thermal and non-thermal plasmas. Applications include pulsed power, lighting, switchgear, environmental technologies and medicine.</p>
-  <p><a href="scientific-topics.html">View the scientific topics</a>.</p>
-  <h3>Conference series and committees</h3><p>The 23rd conference took place in Greifswald, Germany, in 2023. Its archive records earlier meetings and lists the 2023 membership of the International Scientific Committee (ISC) and Executive Management Committee (EMC). <a href="{e(DATA['conference_history_url'])}">GD2023 archive at INP Greifswald</a></p></div>
+  <p><a href="scientific-topics.html">View the scientific topics</a>.</p></div>
+  {key_dates()}
   </article>
   {local_guide()}
 </div></section>
-{key_dates()}
 <section class="city-band" aria-labelledby="city-heading"><img class="city-image" src="assets/images/liverpool-waterfront.jpg" alt="The Liverpool skyline across the River Mersey" loading="lazy" width="4320" height="2430"><div class="city-copy"><span class="eyebrow">Liverpool · United Kingdom</span><h2 id="city-heading">See you in Liverpool.</h2><p>Join us at the {e(DATA['university'])} for an international meeting of researchers and practitioners in gas discharges and their applications.</p><a class="text-link" href="venue.html">Discover the venue {FORWARD}</a></div></section>'''
 
 

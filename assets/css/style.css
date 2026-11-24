@@ -90,6 +90,7 @@ p { margin-bottom: 1.25rem; }
 .fact .label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); margin-bottom: 3px; }
 .fact strong { display: block; font-size: 16px; font-weight: 600; line-height: 1.5; }
 .section { padding-block: 80px; }
+.section.about-section { padding-bottom: 24px; }
 .welcome-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 80px; align-items: start; }
 .welcome-copy h2 { margin-bottom: 25px; }
 .welcome-copy h3 { font-family: var(--serif); font-size: 30px; font-weight: 400; color: var(--ink); margin: 32px 0 15px; }
@@ -172,7 +173,8 @@ p { margin-bottom: 1.25rem; }
 .topic-detail h2 { font-family: var(--sans); font-size: 23px; letter-spacing: -.03em; font-weight: 550; margin-bottom: 11px; }
 .topic-detail p { font-size: 16px; color: var(--muted); margin-bottom: 0; }
 .bottom-note { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 25px; font-size: 15px; color: var(--muted); }
-.home-dates { border-bottom: 1px solid var(--line); }
+.section.home-dates { padding: 0; border-bottom: 1px solid var(--line); }
+.section.home-dates .wrap { width: 100%; }
 .date-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 1rem; }
 .date-table th, .date-table td { vertical-align: top; padding: 16px 0; border-bottom: 1px solid var(--line); }
 .date-table th:first-child { width: 34%; padding-inline-end: 20px; }
